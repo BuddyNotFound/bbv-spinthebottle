@@ -1,0 +1,10 @@
+{
+    "general": {
+        "spin_bottle": "Spin the bottle",
+        "take_bottle": "Take the bottle",
+        "bottle_already_spinning": "Bottle is already spinning"
+    },
+    "error": {
+        "bottle_already_placed": "You already have a bottle placed"
+    }
+}

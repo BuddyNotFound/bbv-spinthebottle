@@ -5,7 +5,8 @@ Main = {
 
 RegisterNetEvent('bbv-spinthebottle',function()
     if Main.Spinning then
-        Wrapper:Notify("Bottle is already spinning")
+        Wrapper:Notify(locale('general.bottle_already_spinning'))
+        
         return 
     end
     Main.Spinning = true
@@ -36,7 +37,7 @@ end)
 
 RegisterNetEvent('bbv-placebottle',function()
     if Main.Props["Bottle"] ~= nil then 
-        Wrapper:Notify("You already have a bottle placed")
+        Wrapper:Notify(locale('error.bottle_already_placed'))
         return 
     end
     
@@ -74,7 +75,7 @@ function Main:SpawnProp(k, pos, model)
     local rot = GetEntityRotation(Main.Props['Bottle'], 2)
     local roll, pitch, yaw = rot.x, rot.y, rot.z
     SetEntityRotation(Main.Props['Bottle'], roll, 90.0, yaw, 2, true)
-    Wrapper:Target(k, 'Spin The Bottle', pos, 'bbv-spinthebottle', "Take The Bottle" ,'bbv-takethebottle')
+    Wrapper:Target(k, locale('general.spin_bottle'), pos, 'bbv-spinthebottle', locale('general.take_bottle') ,'bbv-takethebottle')
 end
 
 function Main:LoadModel(model)
