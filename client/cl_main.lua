@@ -2,18 +2,25 @@ Main = {
     Props = {}
 }
 
-
-RegisterNetEvent('bbv-spinthebottle',function()
+RegisterNetEvent('bbv-spinthebottle:client',function()
     if Main.Spinning then
-        Wrapper:Notify(locale('general.bottle_already_spinning'))
-        
+        Wrapper:Notify("Bottle is already spinning")
+        return 
+    end
+    TriggerServerEvent('bbv-spinthebottle:server', Main.Props['Bottle'])
+end)
+
+
+RegisterNetEvent('bbv-spinthebottle',function(object,randomspin)
+    if Main.Spinning then
+        Wrapper:Notify("Bottle is already spinning")
         return 
     end
     Main.Spinning = true
     local rot = GetEntityRotation(Main.Props['Bottle'], 2)
     local roll, pitch, yaw = rot.x, rot.y, rot.z
     local number_of_spins = 5 -- Number of complete rotations
-    local random_offset = math.random(0, 360) -- Random offset to stop at a random position
+    local random_offset = randomspin -- Random offset to stop at a random position
     local totalDegrees = 360 * number_of_spins + random_offset -- Total degrees to rotate
     local steps = 200 -- Number of steps for the rotation
 
@@ -26,18 +33,18 @@ RegisterNetEvent('bbv-spinthebottle',function()
         currentYaw = currentYaw + stepIncrement
 
         -- Apply the current rotation
-        SetEntityRotation(Main.Props['Bottle'], roll, pitch, currentYaw % 360, 2, true)
+        SetEntityRotation(object, roll, pitch, currentYaw % 360, 2, true)
     end
 
     -- Ensure the final position is set accurately
     local finalYaw = (yaw + totalDegrees) % 360
-    SetEntityRotation(Main.Props['Bottle'], roll, pitch, finalYaw, 2, true)
+    SetEntityRotation(object, roll, pitch, finalYaw, 2, true)
     Main.Spinning = false
 end)
 
 RegisterNetEvent('bbv-placebottle',function()
     if Main.Props["Bottle"] ~= nil then 
-        Wrapper:Notify(locale('error.bottle_already_placed'))
+        Wrapper:Notify("You already have a bottle placed")
         return 
     end
     
@@ -75,7 +82,7 @@ function Main:SpawnProp(k, pos, model)
     local rot = GetEntityRotation(Main.Props['Bottle'], 2)
     local roll, pitch, yaw = rot.x, rot.y, rot.z
     SetEntityRotation(Main.Props['Bottle'], roll, 90.0, yaw, 2, true)
-    Wrapper:Target(k, locale('general.spin_bottle'), pos, 'bbv-spinthebottle', locale('general.take_bottle') ,'bbv-takethebottle')
+    Wrapper:Target(k, 'Spin The Bottle', pos, 'bbv-spinthebottle:client', "Take The Bottle" ,'bbv-takethebottle')
 end
 
 function Main:LoadModel(model)

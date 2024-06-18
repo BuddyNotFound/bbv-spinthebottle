@@ -21,3 +21,7 @@ if Config.Settings.Framework == "ESX" then
         TriggerClientEvent('bbv-placebottle', src)
     end)
 end
+
+RegisterNetEvent('bbv-spinthebottle:server',function(object)
+    TriggerClientEvent('bbv-spinthebottle',-1,object,math.random(0,360))
+end)
